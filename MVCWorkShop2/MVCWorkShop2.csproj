@@ -334,6 +334,7 @@
     <Content Include="Content\images\Login_logo.png" />
     <Content Include="Content\images\male.png" />
     <Content Include="Content\images\one.png" />
+    <Content Include="Content\images\post_logo.png" />
     <Content Include="Content\images\rank_01.JPG" />
     <Content Include="Content\images\rank_example.JPG" />
     <Content Include="Content\images\sun.png" />
