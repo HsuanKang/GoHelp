@@ -1,0 +1,93 @@
+body,
+html {
+  touch-action: pan-y;
+}
+#setting {
+  margin: 0;
+  padding: 0;
+  height: 75%;
+}
+.ui-content {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  -webkit-perspective: 600;
+  -moz-perspective: 600;
+  perspective: 600;
+}
+#box {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  margin: 10px auto 0;
+  cursor:pointer;
+  -webkit-perspective-origin: 50% 50%;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: rotateY(0deg);
+  -moz-perspective-origin: 50% 50%;
+  -moz-transform-style: preserve-3d;
+  -moz-transform: rotateY(0deg);
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: all .5s;
+}
+.box-child {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  text-shadow: none;
+  line-height: 350px;
+  text-align: center;
+  color: yellow;
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+}
+
+.filter-btn {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  transition: all 0.4s ease-in-out 0s;
+}
+
+.filter-btn span {
+  display: block;
+  position: absolute;
+  right: 25px;
+  top: -46px;
+  text-align: center;
+  color: #FA396B;
+  line-height: 40px;
+  border-radius: 50%;
+  font-size: 22px;
+  z-index: 999;
+}
+
+.filter-btn a {
+  position: absolute;
+  line-height: 40px;
+  text-align: center;
+  right: 25px;
+  display: block;
+  top: -46px;
+  color: #a6c67c;
+  z-index: 99;
+  font-size: 22px;
+  transition: all .4s cubic-bezier(.68, 1, .265, 1)
+}
+
+.open:after {
+  transform: scale(1);
+}
+
+.filter-btn.open a:nth-child(1) {
+  transform: translate(10px, -62px);
+}
+
+.filter-btn.open a:nth-child(2) {
+  transform: translate(-50px, -34px);
+}

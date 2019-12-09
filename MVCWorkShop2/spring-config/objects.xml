@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object id="EmployeeController"  type="MVCWorkShop2.Controllers.LibraryController,MVCWorkShop2" singleton="false">
+    <property name="lbService" ref="LBService" />
+  </object>
+
+  <object id="LBService" type="LB.Service.LBService,LB.Service">
+    <property name="lbDao" ref="LBDao" />
+  </object>
+
+  <object id="LBDao" type="LB.Dao.LBDao,LB.Dao"/>
+  <!--切換測試版-->
+  <!--<object id="LBDao" type="LB.Dao.LBTestDao,LB.Dao"/>-->
+</objects>

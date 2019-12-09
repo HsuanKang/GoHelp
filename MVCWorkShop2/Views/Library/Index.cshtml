@@ -1,0 +1,556 @@
+﻿@model LB.Model.LBSearchArg
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--助人-->
+<div data-role="page" id="home" style="background-color:white;">
+    <!--header-->
+    <div data-role="header" class="header" style="background-color:white;">
+        <h1><b>GOHelp</b></h1>
+        <a href="#" id="logout"
+           class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-user ui-btn-icon-notext ui-btn-b ui-btn-inline" style="color:white;background-color:#E2943B;border-style:none;box-shadow:none;">user</a>
+        <div class="nav" data-role="navbar" style="background-color:white;">
+            <ul style="width: 100%;">
+                <li><a href="#home" id="top_btn_new" data-transition="slidefade" style="font-size: 14px;font-family: Microsoft JhengHei;"><i class="fas fa-rss"></i><br />最新</a></li>
+                <li><a href="#share" id="top_btn_share" data-transition="slidefade" style="font-size: 14px;font-family: Microsoft JhengHei;"><i class="fab fa-slideshare"></i><br />共享</a></li>
+                <li><a href="#emergency" id="top_btn_emergency" data-transition="slidefade" style="font-size: 14px;font-family: Microsoft JhengHei;"><i class="fas fa-exclamation-circle"></i><br />緊急</a></li>
+                <li><a href="#together" id="top_btn_together" data-transition="slidefade" style="font-size: 14px;font-family: Microsoft JhengHei;"><i class="fas fa-users"></i><br />揪團</a></li>
+                <li><a href="#sad" id="top_btn_sad" data-transition="slidefade" style="font-size: 14px;font-family: Microsoft JhengHei;"><i class="fas fa-comments"></i><br />解憂</a></li>
+            </ul>
+        </div>
+        <div data-role="navbar" style="height:3px">
+            <ul style="width: 100%;">
+                <li id="line1"></li>
+                <li id="line2"></li>
+                <li id="line3"></li>
+                <li id="line4"></li>
+                <li id="line5"></li>
+            </ul>
+        </div>
+    </div>
+    <!--main-->
+    <div data-role="main">
+        <div class="view"></div>
+        <a href="#helpdetail" id="hide_helping" data-transition="slidedown" style="display:none;"></a>
+        <div id="error_msg"></div>
+        <center><div id="show_post_map" style="width:90%;height:350px;"></div></center>
+        <input type="hidden" id="userId" name="userId">
+        <div id="GridArea">
+            <div id="show_post">
+            </div>
+        </div>
+    </div>
+    <!--footer-->
+    <div data-role="footer" style="box-sizing: border-box;position: absolute;bottom: 0;width: 100%" class="footer">
+        <div class="filter-btn">
+            <a class="one" href="#" style="display:none;"><i class="fas fa-map-marker-alt fa-lg"></i></a>
+            <a class="two" href="#" style="display:none;"><i class="fas fa-columns fa-lg"></i></a>
+            <a class="toggle-btn"><i class="far fa-flag"></i></a>
+            <span></span>
+        </div>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" class="ui-btn" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-hands-helping fa-2x" style="color:#E2943B;"></i><br>助人</a></li>
+                <li><a href="#callhelp" class="ui-btn" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-bullhorn fa-2x" style="color:#E2943B;"></i><br>求助</a></li>
+                <li><a href="#moreSetting" id="more_btn" class="ui-btn" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-bars fa-2x" style="color:#E2943B;"></i><br>更多</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--助人-查看Window-->
+<div data-role="page" id="helpdetail" style="background-color:white;">
+    <div data-role="header" style="background-color:white;border:0px">
+        <h1><b>文章內容</b></h1>
+        <a href="#" class="ui-btn ui-btn-inline ui-corner-all" data-rel="back" style="color:#E2943B;background-color:white;border-style:none;box-shadow:none;"><i class="fas fa-2x fa-times"></i></a>
+    </div>
+    <br><br>
+    <div data-role="main" style="background-color:white;">
+        <input type="hidden" id="post_lat">
+        <input type="hidden" id="post_long">
+        <input type="hidden" id="meet_address">
+        <div class="container">
+            <h4><i class="fas fa-user-circle" style="color:cornflowerblue;"></i>  <span id="post_person_name" style="color:cornflowerblue;"></span></h4>
+            <span id="post_person_phone"></span>
+            <hr>
+            <div id="post_title" class="form-control" style="font-size:1.4rem;text-align:center;line-height:50px;"></div>
+            <h4><i class="fas fa-tag" style="color:#E2943B;"></i>  <span id="post_kind" style="color:#E2943B;"></span></h4>
+            <div id="post_content" class="PContent"></div>
+            <h6 style="color:cornflowerblue;">
+                <i class="fas fa-hourglass-end"></i>  <span id="post_startTime"></span>
+            </h6>
+            <h6 style="color:cornflowerblue;">
+                <i class="fas fa-arrow-right"></i>  <span id="post_endTime"></span>
+            </h6>
+            <center><div id="helping_map" style="width:95%;height:300px;"></div></center>
+            <hr />
+            <a href="#" class="btn btn-success" style="color:white">我要解決</a>
+            <a href="#" class="btn btn-primary disabled" style="color:white">解決中</a>
+            <hr>
+            <h4><b>留言版</b></h4>
+            <div id="post_msg" style="font-size:1.3rem">
+            </div>
+            <input type="text" class="form-control Msginline" id="input_msg"
+                   placeholder="我要留言...." style="font-family: Microsoft JhengHei;width:80%">
+            <input type="button" class="btn btn-primary" id="send_msg" value="發布" style="font-family: Microsoft JhengHei;">
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+<!--求助-->
+<div data-role="page" id="callhelp">
+    <div data-role="header" class="header" style="background-color:white;">
+        <h1><b>GOHelp</b></h1>
+    </div>
+    <div data-role="main" style="background-color:white;">
+        <center>
+            <span style="width:100%;font-family: Microsoft JhengHei;font-size:1.2rem;color:aliceblue;" class="badge badge-warning">請填寫求助內容</span>
+            <br><br>
+            <div class="login-form-1" style="width:90%;height:auto">
+                <form id="ask_form" class="text-left">
+                    <div class="main-login-form">
+                        <div class="login-group">
+                            <!--欄位-->
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="PostTitle" name="PostTitle"
+                                       placeholder="求助標題" style="font-family: Microsoft JhengHei;">
+                            </div>
+                            <!--欄位-->
+                            <div class="form-group">
+                                <textarea class="form-control" id="PostContent" name="PostContent"
+                                          placeholder="求助內容" style="font-family: Microsoft JhengHei;"></textarea>
+                            </div>
+                            <!--欄位-->
+                            <div class="form-group">
+                                <b> 開放時間：</b>
+                                <select id="open_time" name="open_time">
+                                    <option value="1">1 hour</option>
+                                    <option value="2" SELECTED>2 hour</option>
+                                    <option value="3">3 hour</option>
+                                    <option value="4">4 hour</option>
+                                    <option value="5">5 hour</option>
+                                    <option value="6">6 hour</option>
+                                    <option value="7">7 hour</option>
+                                    <option value="8">8 hour</option>
+                                    <option value="9">9 hour</option>
+                                    <option value="10">10 hour</option>
+                                    <option value="11">11 hour</option>
+                                    <option value="12">12 hour</option>
+                                </select>
+                            </div>
+                            <!--欄位-->
+                            <div class="form-group">
+                                <select id="City" name="City">
+                                    <option value="基隆">基隆</option>
+                                    <option value="新北">新北</option>
+                                    <option value="臺北" SELECTED>台北</option>
+                                    <option value="桃園">桃園</option>
+                                    <option value="新竹">新竹</option>
+                                    <option value="苗栗">苗栗</option>
+                                    <option value="臺中">臺中</option>
+                                    <option value="彰化">彰化</option>
+                                    <option value="雲林">雲林</option>
+                                    <option value="嘉義">嘉義</option>
+                                    <option value="臺南">臺南</option>
+                                    <option value="高雄">高雄</option>
+                                    <option value="屏東">屏東</option>
+                                    <option value="南投">南投</option>
+                                    <option value="宜蘭">宜蘭</option>
+                                    <option value="花蓮">花蓮</option>
+                                    <option value="臺東">臺東</option>
+                                    <option value="外島">外島</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                            <!--欄位-->
+                            <div class="form-group">
+                                <b>標記問題位置</b>
+                                <input id="autocomplete_search" name="autocomplete_search" type="text" class="form-control" placeholder="Search" />
+                                <input type="hidden" name="lat" id="lat">
+                                <input type="hidden" name="long" id="long">
+                            </div>
+                            <!--欄位-->
+                            <div class="form-group">
+                                <b>問題標籤</b>
+                                <select id="question_kind" name="question_kind">
+                                    <option value="emergency">緊急</option>
+                                    <option value="talk">解憂</option>
+                                    <option value="together">揪團</option>
+                                    <option value="Share">共享經濟</option>
+                                </select>
+                            </div>
+                            <!--欄位-->
+                            <div class="form-group">
+                                <b>是否顯示電話號碼在貼文中?</b>
+                                <select id="question_IsShowPhone" name="question_IsShowPhone">
+                                    <option value="True">是</option>
+                                    <option value="False">否</option>
+                                </select>
+                            </div>
+                            <div class="form-group login-group-checkbox">
+                                <input type="checkbox" class="" id="safty_check" name="safty_check">
+                                <label for="safty_check" style="font-family: Microsoft JhengHei;">確定位置公開且安全？</label>
+                            </div>
+                        </div>
+                        <!--送出-->
+                        <button type="submit" id="insert_q" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </form>
+            </div>
+        </center>
+    </div>
+    <div data-role="footer" style="background-color:white;box-sizing: border-box;bottom: 0;width: 100%" class="footer">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" class="ui-btn" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-hands-helping fa-2x" style="color:#E2943B;"></i><br>助人</a></li>
+                <li><a href="#callhelp" class="ui-btn" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-bullhorn fa-2x" style="color:#E2943B;"></i><br>求助</a></li>
+                <li><a href="#moreSetting" class="ui-btn" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-bars fa-2x" style="color:#E2943B;"></i><br>更多</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--更多-->
+<div data-role="page" id="moreSetting" style="background-color:white;">
+    <div data-role="header" class="header" style="background-color:white;">
+        <h1><b>GOHelp</b></h1>
+        <div data-role="navbar" style="text-align: center">
+            <ul>
+                <li>
+                    <a href="#moreSetting" id="rank"
+                       style="font-size: 15px;font-family: Microsoft JhengHei;"><i class="fas fa-medal"></i><br />排行榜</a>
+                </li>
+                <li>
+                    <a href="#moreSetting" id="hero"
+                       style="font-size: 15px;font-family: Microsoft JhengHei;"><i class="far fa-handshake"></i><br />助人事蹟</a>
+                </li>
+                <li>
+                    <a href="#moreSetting" id="history"
+                       style="font-size: 15px;font-family: Microsoft JhengHei;"><i class="fas fa-bars"></i><br />求助紀錄</a>
+                </li>
+                <li>
+                    <a href="#moreSetting" id="user_data"
+                       style="font-size: 15px;font-family: Microsoft JhengHei;"><i class="fas fa-user-edit"></i><br />個人資料</a>
+                </li>
+            </ul>
+        </div>
+        <div data-role="navbar" style="height:3px">
+            <ul style="width: 100%;">
+                <li id="moreLine_1"></li>
+                <li id="moreLine_2"></li>
+                <li id="moreLine_3"></li>
+                <li id="moreLine_4"></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div id="title" style="text-align: center; background-color:#E98B2A; color:white"></div>
+        <div id="search_div" style="border:0px;display:none;">
+            <input type='text' id='searchBox' style="border-style:none" class='k-textbox' placeholder="輸入暱稱" />
+            <input type="button" id="btnSearch" class="k-button" value="搜尋" />
+        </div>
+        <div id="content" class="gridContent" style="border:0px;"></div>
+    </div>
+    <div data-role="footer" style="height: 80px;box-sizing: border-box;position: fixed;bottom: 0;width: 100%;">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-hands-helping fa-2x" style="color:#E2943B;"></i><br>助人</a></li>
+                <li><a href="#callhelp" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-bullhorn fa-2x" style="color:#E2943B;"></i><br>求助</a></li>
+                <li><a href="#moreSetting" style="line-height:40px;font-size: 14px;font-family: Microsoft JhengHei;color:#E2943B;"><i class="fas fa-bars fa-2x" style="color:#E2943B;"></i><br>更多</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- message-->
+<div data-role="page" id="message">
+    <div data-role="header" class="header" style="background-color:white;">
+        <h1><b>GOHelp</b></h1>
+        <a href="#" class="ui-btn ui-btn-inline ui-corner-all" data-rel="back" style="color:white;background-color:#E2943B;border-style:none;box-shadow:none;"><i class="fas fa-chevron-left"></i></a>
+        <a href="#logout"
+           class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-user ui-btn-icon-notext ui-btn-b ui-btn-inline" style="color:white;background-color:#E2943B;border-style:none;box-shadow:none;">user</a>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div class="container">
+            <div class="row" style="height:50px;">
+                <img src="~/Content/images/male.png" width="50" height="50" style=" position: absolute; left:0;" />
+                <div id="chat_a"
+                     style="border: 3px #E2943B solid; border-top-right-radius:40px; border-bottom-right-radius:40px; position: absolute; left:50px;">
+                    <font face="Microsoft JhengHei"> 嗨，我有胃藥可以帶過去給你！</font>
+                </div>
+            </div>
+            <div class="row" style="height:50px;">
+                <div id="chat_b"
+                     style="border: 3px #E2943B solid; border-top-left-radius:40px; border-bottom-left-radius:40px; position: absolute; right:50px;">
+                    <font face="Microsoft JhengHei"> 謝謝你！我在木椅上等你！</font>
+                </div>
+                <img src="~/Content/images/female.png" width="50" height="50" style=" position: absolute; right:0;" />
+            </div>
+        </div>
+    </div>
+    <div data-role="footer" style="height: 80px;box-sizing: border-box;position: fixed;bottom: 0;width: 100%;">
+        <input type="text" name="message" placeholder="Aa" />
+    </div>
+</div>
+<!--google 金鑰-->
+<meta name="google-signin-client_id"
+      content="576690456918-fdeq1ma744b43p40rv9j4f7gr8ur7v5b.apps.googleusercontent.com">
+<!--facebook 金鑰-->
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0&appId=2437149979895267&autoLogAppEvents=1"></script>
+<!--google api-->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<!-- Login-->
+<div data-role="page" id="login" style="background-color:bisque; background-position:50% 50%;">
+    <div data-role="header" style="background-color:#E2943B;">
+        <h1 style="color:white;">Go Help！</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <center>
+            <br>
+            <div class="login-form-1">
+                <form id="login-form" class="text-left">
+                    <div class="main-login-form">
+                        <div class="login-group">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="uname" name="uname" placeholder="帳號">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="upasswd" name="upasswd" placeholder="密碼">
+                            </div>
+                            <div class="form-group login-group-checkbox">
+                                <input type="checkbox" id="login_remember" name="login_remember">
+                                <label for="login_remember" style="font-family: Microsoft JhengHei;">記住我</label>
+                            </div>
+                            <br>
+                            想了解Go Help！<a href="#signup" id="joinus" data-transition="slidefade">加入我們！</a>
+                        </div>
+                        <button type="submit" id="login_sb" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                    <center><div id="test"></div></center>
+                </form>
+            </div>
+            <br><br>
+            <!-- <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button> -->
+            @*<div class="fb-login-button" data-width="" data-size="medium" data-button-type="continue_with"
+                 data-auto-logout-link="false" data-use-continue-as="true" scope="public_profile,email"
+                 onlogin="checkLoginState();"></div>*@
+            <!--Google 登入-->
+            <div class="g-signin2" data-onsuccess="onSignIn" data-longtitle="true"></div>
+            <br>
+            <img src="/Content/images/Login_logo.png">
+        </center>
+    </div>
+</div>
+<!--登出提示框-->
+<div data-role="dialog" id="confirm-dialog">
+    <div data-role="header">
+    </div>
+    <div data-role="content">
+        <p id="dialogContent" style="font-family: Microsoft JhengHei;">確定登出嗎?</p>
+        <a data-role="button" data-rel="back" id="chk_logout_btn">是</a>
+        <a data-role="button" data-rel="back">否</a>
+    </div>
+</div>
+<!--成功提示框-->
+<div data-role="dialog" id="suc_dialog">
+    <div data-role="header">
+    </div>
+    <div data-role="content">
+        <div id="sucDialogContent" style="font-family: Microsoft JhengHei;"></div>
+    </div>
+</div>
+<!--註冊-->
+<div data-role="page" id="signup" style="background-color:bisque;">
+    <div data-role="header" style="background-color:#E2943B;">
+        <a href="#" class="ui-btn ui-btn-inline ui-corner-all" data-rel="back" style="color:white;background-color:#E2943B;border-style:none;box-shadow:none;"><i class="fas fa-chevron-left"></i></a>
+        <h1 style="color:white;">Go Help！</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div class="text-center" style="padding:10px 0">
+            <div class="logo" style="font-family: Microsoft JhengHei;">註冊</div>
+            <!-- Main Form -->
+            <div class="login-form-1">
+                <form id="register-form" class="text-left">
+                    <div class="login-form-main-message"></div>
+                    <div class="main-login-form">
+                        <div class="login-group">
+                            <div class="form-group">
+                                <label for="reg_fullname" class="sr-only">Full Name</label>
+                                <input type="text" class="form-control" id="reg_fullname" name="reg_fullname" placeholder="暱稱">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg_username" class="sr-only">Email address</label>
+                                <input type="text" class="form-control" id="reg_username" name="reg_username" placeholder="帳號">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg_password" class="sr-only">Password</label>
+                                <input type="password" class="form-control" id="reg_password" name="reg_password" placeholder="密碼">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg_password_confirm" class="sr-only">Password Confirm</label>
+                                <input type="password" class="form-control" id="reg_password_confirm" name="reg_password_confirm" placeholder="確認密碼">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg_email" class="sr-only">Email</label>
+                                <input type="text" class="form-control" id="reg_email" name="reg_email" placeholder="信箱">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg_phone" class="sr-only">Phone</label>
+                                <input type="text" class="form-control" id="reg_phone" name="reg_phone" placeholder="手機">
+                            </div>
+                            <div class="form-group login-group-checkbox">
+                                <input type="radio" class="" name="reg_gender" id="male" placeholder="username" value="true">
+                                <label for="male">男</label>
+                                <input type="radio" class="" name="reg_gender" id="female" placeholder="username" value="false">
+                                <label for="female">女</label>
+                            </div>
+                            <div class="form-group login-group-checkbox">
+                                <input type="checkbox" class="" id="reg_agree" name="reg_agree">
+                                @*<label for="reg_agree">i agree with <a href="#">terms</a></label>*@
+                            </div>
+                        </div>
+                        <button type="submit" id="reg_submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </form>
+            </div>
+            <!-- end:Main Form -->
+        </div>
+    </div>
+</div>
+<!--GF登入者註冊-->
+<div data-role="page" id="easyRegister" style="background-color:bisque;">
+    <div data-role="header" style="background-color:#E2943B;">
+        <a href="#" class="ui-btn ui-btn-inline ui-corner-all" data-rel="back" style="color:white;background-color:#E2943B;border-style:none;box-shadow:none;"><i class="fas fa-chevron-left"></i></a>
+        <h1 style="color:white;">Go Help！</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div class="text-center" style="padding:10px 0">
+            <div class="logo" style="font-family: Microsoft JhengHei;">請幫我們輸入基本資料來使用app~</div>
+            <!-- Main Form -->
+            <div class="login-form-1">
+                <form id="easyRegister-form" class="text-left">
+                    <div class="login-form-main-message"></div>
+                    <div class="main-login-form">
+                        <div class="login-group">
+                            <div class="form-group">
+                                <label for="gf_name" class="sr-only">NickName</label>
+                                <input type="text" class="form-control" id="gf_name" name="gf_name" placeholder="暱稱">
+                            </div>
+                            <div class="form-group">
+                                <label for="gf_phone" class="sr-only">Phone</label>
+                                <input type="text" class="form-control" id="gf_phone" name="gf_phone" placeholder="手機">
+                            </div>
+                            <div class="form-group login-group-checkbox">
+                                <input type="radio" class="" name="gf_gender" id="gf_male" value="true">
+                                <label for="gf_male">男</label>
+                                <input type="radio" class="" name="gf_gender" id="gf_female" value="false">
+                                <label for="gf_female">女</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="gf_Uid" name="gf_Uid">
+                            </div>
+                            <div class="form-group login-group-checkbox">
+                                <input type="checkbox" class="" id="gf_agree" name="gf_agree">
+                            </div>
+                        </div>
+                        <button type="submit" id="gf_submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                        <a href="#easyLogin" id="gf_login" data-transition="slidefade">填寫過了，這裡登入</a>
+                    </div>
+                </form>
+            </div>
+            <!-- end:Main Form -->
+        </div>
+    </div>
+</div>
+
+<!--GF登入-->
+<div data-role="page" id="easyLogin" style="background-color:bisque;">
+    <div data-role="header" style="background-color:#E2943B;">
+        <a href="#" class="ui-btn ui-btn-inline ui-corner-all" data-rel="back" style="color:white;background-color:#E2943B;border-style:none;box-shadow:none;"><i class="fas fa-chevron-left"></i></a>
+        <h1 style="color:white;">Go Help！</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div class="text-center" style="padding:10px 0">
+            <div class="logo" style="font-family: Microsoft JhengHei;">Go Help！</div>
+            <!-- Main Form -->
+            <div class="login-form-1">
+                <form id="easyLogin-form" class="text-left">
+                    <div class="login-form-main-message"></div>
+                    <div class="main-login-form">
+                        <div class="login-group">
+                            <div class="form-group">
+                                <label for="easyLogin_name" class="sr-only">NickName</label>
+                                <input type="text" class="form-control" id="easyLogin_name" name="easyLogin_name" placeholder="暱稱">
+                            </div>
+                            <div class="form-group">
+                                <label for="easyLogin_phone" class="sr-only">Phone</label>
+                                <input type="text" class="form-control" id="easyLogin_phone" name="easyLogin_phone" placeholder="手機">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="easyLogin_Uid" name="easyLogin_Uid">
+                            </div>
+                        </div>
+                        <button type="submit" id="easyLogin_submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </form>
+            </div>
+            <!-- end:Main Form -->
+        </div>
+    </div>
+</div>
+
+<!--MeetAddress Template-->
+<script id="MeetAddress-template" type="text/x-kendo-template">
+    #if(City != null){#
+    <a href="" data-rel="popup" data-transition="pop" class="adr_pop">
+        #=City#
+    </a>
+    #}else{#
+    #}#
+</script>
+<!--Kind Template-->
+<script id="Kind-template" type="text/x-kendo-template">
+    # switch(Kind) {
+    case 'Share': #
+    <div id="kind">
+        <span id="kindicon1" title="#=Kind#" class="fab fa-slideshare"></span>
+    </div>
+    # break
+    case "together": #
+    <div id="kind">
+        <span id="kindicon2" title="#=Kind#" class="fas fa-users "></span>
+    </div>
+    # break
+    case "talk": #
+    <div id="kind">
+        <span id="kindicon3" title="#=Kind#" class="fas fa-comments"></span>
+    </div>
+    # break
+    case "emergency": #
+    <div id="kind">
+        <span id="kindicon4" title="#=Kind#" class="fas fa-exclamation-circle"></span>
+    </div>
+    # break
+    }#
+</script>
+<!--Rank Template-->
+<script id="Rank-template" type="text/x-kendo-template">
+    #if(Rank == 1){#
+    <i class="fas fa-crown" style="color:gold"></i>
+    #}else if(Rank == 2){#
+    <i class="fas fa-crown" style="color:grey"></i>
+    #}else if(Rank == 3){#
+    <i class="fas fa-crown" style="color:saddlebrown"></i>
+    #}else{#
+    <div>#=Rank#</div>
+    #}#
+</script>
+<!--MeetAddress Template-->
+<script id="Gender-template" type="text/x-kendo-template">
+    #if(Gender == "True"){#
+    <img src="https://png.pngtree.com/png-clipart/20190618/original/pngtree-girl-girl-girl-teenage-girl-png-image_3937912.jpg" width="50" height="50">
+    #}else{#
+    <img src="https://png.pngtree.com/png-clipart/20190618/original/pngtree-boy-boy-boy-juvenile-png-image_3937913.jpg" width="50" height="50">
+    #}#
+</script>
